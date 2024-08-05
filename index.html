@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <title>Hello from Electron renderer!</title>
+</head>
+
+<body>
+    <h1>Teste de Aplicação Electron!</h1>
+    <p id="info"></p>
+    <button id="button">Ping</button><br /><br />
+    <button id="fileButton">Anexo</button>
+    <span id="file"></span>
+    <div>
+        <h1>Cliente FTP</h1>
+        <input type="text" id="server" placeholder="Host">
+        <input type="text" id="user" placeholder="Usuário">
+        <input type="password" id="password" placeholder="Senha">
+        <button id="connect">Conectar</button>
+        <pre id="output"></pre>
+        <script src="./renderer.js"></script>
+    </div>
+</body>
+
+</html>
