@@ -9,11 +9,11 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
-    "electron": "file:"
-  },
   "dependencies": {
     "basic-ftp": "^5.0.5",
     "ftp": "^0.3.10"
+  },
+  "devDependencies": {
+    "electron": "^31.3.1"
   }
 }
