@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <link rel="stylesheet" href="styles.css">
     <title>Hello from Electron renderer!</title>
 </head>
 
@@ -20,7 +21,7 @@
         <input type="text" id="user" placeholder="Usuário">
         <input type="password" id="password" placeholder="Senha">
         <button id="connect">Conectar</button>
-        <pre id="output"></pre>
+        <div id="output"></div>
         <script src="./renderer.js"></script>
     </div>
 </body>

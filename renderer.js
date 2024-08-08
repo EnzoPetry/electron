@@ -16,6 +16,17 @@ fileBtn.addEventListener("click", async () => {
 	const filePath = await window.api.openFile();
 	filePathMsg.innerText = filePath;
 });
+const updateList = (path, parentPath, pastas, arquivos) => {
+	let listItens = "";
+	if (parentPath) {
+		listItens += `<button class="return" id="${parentPath}">..</button>`;
+	}
+	listItens += pastas.map((file) => `<div class="folder" id="${path}/${file.name}"><img src="./pngwing.com.png"><p>${file.name}</p></div>`);
+	listItens += arquivos.map((file) => `<div class="item" id="${path}/${file.name}"><p>${file.name}</p>`).join("</div>");
+
+	// output.innerHTML = `<button class="return" id="${parentPath}">..</button>${pastas.map((file) => `<div class="item" id="item_${file.name}"><img src="./pngwing.com.png" class="folder" id="${path}/${file.name}">${file.name}</button>`).join("")}${arquivos.map((file) => `<p>${file.name}</p>`).join("")}<div>`;
+	output.innerHTML = listItens;
+};
 
 connectButton.addEventListener("click", async () => {
 	const server = document.getElementById("server").value;
@@ -29,7 +40,7 @@ connectButton.addEventListener("click", async () => {
 			password: password,
 		});
 		if (connectResult === "conectado") {
-			const listFilesAndFolders = async (path) => {
+			const listFiles = async (path) => {
 				const list = await window.api.list(
 					{
 						host: server,
@@ -38,22 +49,25 @@ connectButton.addEventListener("click", async () => {
 					},
 					path
 				);
+				console.log(list);
 				const arquivos = list.filter((file) => file.type === 1);
 				const pastas = list.filter((file) => file.type === 2);
+				const parentPath = path === "/" ? null : path.split("/").slice(0, -1).join("/") || "/";
+				updateList(path, parentPath, pastas, arquivos);
 
-				output.innerHTML = `
-					${pastas.map((file) => `<button class="folder" id="${path}/${file.name}">${file.name}</button>`).join("")}
-					${arquivos.map((file) => `<p>${file.name}</p>`).join("")}
-				`;
-
-				document.querySelectorAll(".folder").forEach(button => {
+				if (parentPath) {
+					document.querySelector(".return").addEventListener("click", async () => {
+						await listFiles(parentPath);
+					});
+				}
+				document.querySelectorAll(".folder").forEach((button) => {
 					button.addEventListener("click", async () => {
-						await listFilesAndFolders(button.id);
+						await listFiles(button.id);
 					});
 				});
 			};
 
-			await listFilesAndFolders("/");
+			await listFiles("/");
 		} else {
 			output.textContent = "Erro de Conexão - ";
 		}
