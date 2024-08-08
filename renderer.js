@@ -29,18 +29,31 @@ connectButton.addEventListener("click", async () => {
 			password: password,
 		});
 		if (connectResult === "conectado") {
-			const list = await window.api.list(
-				{
-					host: server,
-					user: user,
-					password: password,
-				},
-				"/"
-			);
-			const fileNames = list.map((file) => file.name);
-			output.innerHTML = fileNames
-				.map((file) => `<p>${file}</p>`)
-				.join("");
+			const listFilesAndFolders = async (path) => {
+				const list = await window.api.list(
+					{
+						host: server,
+						user: user,
+						password: password,
+					},
+					path
+				);
+				const arquivos = list.filter((file) => file.type === 1);
+				const pastas = list.filter((file) => file.type === 2);
+
+				output.innerHTML = `
+					${pastas.map((file) => `<button class="folder" id="${path}/${file.name}">${file.name}</button>`).join("")}
+					${arquivos.map((file) => `<p>${file.name}</p>`).join("")}
+				`;
+
+				document.querySelectorAll(".folder").forEach(button => {
+					button.addEventListener("click", async () => {
+						await listFilesAndFolders(button.id);
+					});
+				});
+			};
+
+			await listFilesAndFolders("/");
 		} else {
 			output.textContent = "Erro de Conexão - ";
 		}
