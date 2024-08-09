@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const {contextBridge, ipcRenderer} = require("electron");
 
 contextBridge.exposeInMainWorld("versions", {
 	node: () => process.versions.node,
@@ -6,20 +6,12 @@ contextBridge.exposeInMainWorld("versions", {
 	electron: () => process.versions.electron,
 });
 
-// contextBridge.exposeInMainWorld("ping", {
-// 	ping: () => ipcRenderer.invoke("ping"),
-// });
 
-// contextBridge.exposeInMainWorld("file", {});
-
-// contextBridge.exposeInMainWorld("ftp", {
-// 	connect: (config) => ipcRenderer.invoke("ftp-connect", config),
-// 	list: (config, path) => ipcRenderer.invoke("ftp-list", config, path),
-// });
 
 contextBridge.exposeInMainWorld("api", {
 	ping: () => ipcRenderer.invoke("ping"),
 	openFile: () => ipcRenderer.invoke("dialog:openFile"),
 	connect: (config) => ipcRenderer.invoke("ftp-connect", config),
 	list: (config, path) => ipcRenderer.invoke("ftp-list", config, path),
+	download: (config, fileName, fileDirectory) => ipcRenderer.invoke("ftp-download", config, fileName, fileDirectory),
 });

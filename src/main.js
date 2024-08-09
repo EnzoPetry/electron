@@ -1,6 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const {app, BrowserWindow, ipcMain} = require("electron");
 const path = require("node:path");
-const {	handleFileOpen,	handleConnect, handleListFiles,} = require("./handlers");
+const {handleFileOpen, handleConnect, handleListFiles, handleDownload} = require("./handlers");
 
 function createWindow() {
 	const win = new BrowserWindow({
@@ -19,6 +19,7 @@ app.whenReady().then(() => {
 	ipcMain.handle("dialog:openFile", handleFileOpen);
 	ipcMain.handle("ftp-connect", handleConnect);
 	ipcMain.handle("ftp-list", handleListFiles);
+	ipcMain.handle("ftp-download", handleDownload);
 	createWindow();
 	app.on("window-all-closed", () => {
 		if (process.platform !== "darwin") {

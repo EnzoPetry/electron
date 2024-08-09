@@ -1,4 +1,5 @@
 const ftp = require("basic-ftp");
+const fs = require("fs");
 
 const connect = async (config) => {
 	const client = new ftp.Client();
@@ -24,4 +25,25 @@ const listFiles = async (client, directoryPath) => {
 		client.close();
 	}
 };
-module.exports = { connect, listFiles };
+
+const checkFolder = async () => {
+	try {
+		await fs.promises.mkdir("./downloads", {recursive: true});
+	} catch (err) {
+		console.error(`Erro ao criar diretório downloads:`, err.message);
+		throw err;
+	}
+};
+const downloadFile = async (client, fileName, fileDirectory) => {
+	try {
+		await checkFolder();
+		await client.downloadTo(`./downloads/${fileName}`, `${fileDirectory}/${fileName}`);
+		console.log(`Arquivo ${fileName} baixado com sucesso.`);
+	} catch (err) {
+		console.error("Erro ao baixar arquivo:", err.message);
+		throw err;
+	} finally {
+		client.close();
+	}
+};
+module.exports = {connect, listFiles, downloadFile};
