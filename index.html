@@ -13,14 +13,19 @@
     <h1>Teste de Aplicação Electron!</h1>
     <p id="info"></p>
     <button id="button">Ping</button><br /><br />
-    <button id="fileButton">Anexo</button>
-    <span id="file"></span>
     <div>
         <h1>Cliente FTP</h1>
-        <input type="text" id="server" placeholder="Host">
-        <input type="text" id="user" placeholder="Usuário">
-        <input type="password" id="password" placeholder="Senha">
-        <button id="connect">Conectar</button>
+        <div id="connection">
+            <div>
+                <input type="text" id="server" placeholder="Host">
+                <input type="text" id="user" placeholder="Usuário">
+                <input type="password" id="password" placeholder="Senha">
+            </div>
+            <div id="buttons">
+                <button id="connect">Conectar</button>
+                <button id="fileButton" >Anexo</button>
+            </div>
+        </div>
         <div id="output"></div>
         <script src="./renderer.js"></script>
     </div>

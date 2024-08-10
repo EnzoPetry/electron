@@ -4,6 +4,9 @@ const fileBtn = document.getElementById("fileButton");
 const filePathMsg = document.getElementById("file");
 const connectButton = document.getElementById("connect");
 const output = document.getElementById("output");
+const buttonsDiv = document.getElementById("buttons");
+
+let currentPath = "/";
 
 info.innerText = `Chrome v${versions.chrome()}, Node v${versions.node()}, e Electron v${versions.electron()}`;
 
@@ -18,10 +21,12 @@ const updateList = (path, parentPath, pastas, arquivos) => {
 	if (parentPath) {
 		listItens += `<button class="return" id="${parentPath}">..</button>`;
 	}
-	listItens += pastas	.map((file) => {
+	listItens += pastas
+		.map((file) => {
 			const pathFiltered = path === "/" ? `/${file.name}` : `${path}/${file.name}`;
 			return `<div class="folder" id="${pathFiltered}"><img src="./pngwing.com.png"><p>${file.name}</p></div>`;
-		}).join("");
+		})
+		.join("");
 	listItens += arquivos.map((file) => `<div class="item" id="/${file.name}"><p>${file.name}</p></div>`).join("");
 	output.innerHTML = listItens;
 };
@@ -37,6 +42,7 @@ const downloadFile = async (fileName, fileDirectory) => {
 
 const listFiles = async (path) => {
 	try {
+		currentPath = path;
 		const list = await window.api.list(connectionData(), path);
 		console.log(list);
 		const arquivos = list.filter((file) => file.type === 1);
@@ -67,6 +73,7 @@ connectButton.addEventListener("click", async () => {
 		const connectResult = await window.api.connect(connectionData());
 		if (connectResult === "conectado") {
 			await listFiles("/");
+			fileBtn.style.visibility = "visible";
 		} else {
 			output.textContent = "Erro de Conexão - ";
 		}
@@ -78,9 +85,16 @@ connectButton.addEventListener("click", async () => {
 		const response = await window.api.ping();
 		console.log(response);
 	});
-
-	fileBtn.addEventListener("click", async () => {
-		const filePath = await window.api.openFile();
-		filePathMsg.innerText = filePath;
-	});
+});
+function changePathFormat(path) {
+	return path.replace(/\\/g, "/");
+}
+function getFileName(path) {
+	return path.split("/").pop();
+}
+fileBtn.addEventListener("click", async () => {
+	const filePath = changePathFormat(await window.api.openFile());
+	console.log(connectionData(), currentPath, filePath);
+	console.log(connectionData(), `${currentPath}${getFileName(filePath)}`, filePath);
+	await window.api.upload(connectionData(), `${currentPath}${getFileName(filePath)}`, filePath);
 });

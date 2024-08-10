@@ -9,6 +9,13 @@ button {
 	border: 1px solid #ccc;
 	padding: 5px 8px;
 }
+#fileButton {
+	visibility: hidden;
+}
+#connection {
+	display: flex;
+	column-gap: 10px;
+}
 #output {
 	margin-top: 20px;
 }

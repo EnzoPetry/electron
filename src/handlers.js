@@ -1,5 +1,5 @@
 const {dialog} = require("electron");
-const {connect, listFiles, downloadFile} = require("./ftp");
+const {connect, listFiles, downloadFile, uploadFile} = require("./ftp");
 
 const handleFileOpen = async () => {
 	const {canceled, filePaths} = await dialog.showOpenDialog();
@@ -24,12 +24,25 @@ const handleDownload = async (event, config, fileName, fileDirectory) => {
 		client = await connect(config);
 		await downloadFile(client, fileName, fileDirectory);
 		return "downloaded";
-	} catch (error) {
-		console.error("Erro ao baixar arquivo:", error.message);
-		throw error;
+	} catch (err) {
+		console.error("Erro ao baixar arquivo:", err.message);
+		throw err;
+	} finally {
+		if (client) client.close();
+	}
+};
+const handleUpload = async (event, config, fileName, fileDirectory) => {
+	let client;
+	try {
+		client = await connect(config);
+		await uploadFile(client, fileName, fileDirectory);
+		return "uploaded";
+	} catch (err) {
+		console.log("Erro ao inserir arquivo:", err);
+		throw err;
 	} finally {
 		if (client) client.close();
 	}
 };
 
-module.exports = {handleFileOpen, handleConnect, handleListFiles, handleDownload};
+module.exports = {handleFileOpen, handleConnect, handleListFiles, handleDownload, handleUpload};

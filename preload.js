@@ -6,12 +6,11 @@ contextBridge.exposeInMainWorld("versions", {
 	electron: () => process.versions.electron,
 });
 
-
-
 contextBridge.exposeInMainWorld("api", {
 	ping: () => ipcRenderer.invoke("ping"),
 	openFile: () => ipcRenderer.invoke("dialog:openFile"),
 	connect: (config) => ipcRenderer.invoke("ftp-connect", config),
 	list: (config, path) => ipcRenderer.invoke("ftp-list", config, path),
 	download: (config, fileName, fileDirectory) => ipcRenderer.invoke("ftp-download", config, fileName, fileDirectory),
+	upload: (config, fileName, fileDirectory) => ipcRenderer.invoke("ftp-upload", config, fileName, fileDirectory),
 });

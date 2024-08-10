@@ -46,4 +46,17 @@ const downloadFile = async (client, fileName, fileDirectory) => {
 		client.close();
 	}
 };
-module.exports = {connect, listFiles, downloadFile};
+const uploadFile = async (client, fileName, fileDirectory) => {
+	try {
+		await client.uploadFrom(fileDirectory, fileName);
+		console.log(`Upload realizado! ${fileName}`);
+	} catch (err) {
+		console.error("Erro ao baixar arquivo:", err.message);
+		throw err;
+	} finally {
+		client.close();
+	}
+};
+
+};
+module.exports = {connect, listFiles, downloadFile, uploadFile};
